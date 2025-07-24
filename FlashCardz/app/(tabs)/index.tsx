@@ -144,7 +144,7 @@ function QuizScreen({ cards, goBack }: {cards: Card[], goBack: () => void }) {
               },
             ]}
           >
-            <Text style={styles.cardText}>{card.answer}</Text>
+            <Text style={styles.cardAnswer}>{card.answer}</Text>
           </Animated.View>
         </View>                   
       </TouchableOpacity>
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
   flashcard: {
     width: 350,
     height: 200,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#fff9f9ff",
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 10,
@@ -202,6 +202,11 @@ const styles = StyleSheet.create({
   },
   cardText: {
     fontSize: 30,
+    textAlign: "center",
+  },
+  cardAnswer: {
+    color: "#4433e0ff",
+    fontSize: 50,
     textAlign: "center",
   },
 });
