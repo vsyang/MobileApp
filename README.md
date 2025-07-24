@@ -25,12 +25,13 @@ Xcode and Simulator
 - [Expo](https://docs.expo.dev/get-started/start-developing)
 - [Apple (Xcode)](https://developer.apple.com/xcode/)
 - [Codewithchris](https://codewithchris.com/xcode-tutorial)
-- [YouTube](https://www.youtube.com/watch?v=l9ov48v0M2M&ab_channel=notJust%E2%80%A4dev)
+- [YouTube (Quick Tutorial)](https://www.youtube.com/watch?v=J2j1yk-34OY&ab_channel=NetNinja)
+- [YouTube (Flip Animation)](https://www.youtube.com/watch?v=ghLuM0ANOk4&ab_channel=JonasGr%C3%B8ndahl)
 
 # Future Work
 
 Some things that I could fix in the future:
 
 - Better visual design
-- Item 2
-- Item 3
+- Get rid of or utilize the second screen
+- Have an option where user can have different sets of flashcards

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, Animated, Easing } from 'react-native';
 import { Stack } from 'expo-router';
 
-// Create a custom blueprint for Card
+// Create a custom blueprint for flashcard
 type Card = {
   id: string;
   question: string;
@@ -33,7 +33,7 @@ export default function HomeScreen() {
   };
 
   if (quizStart) {
-    return <QuizScreen cards={cards} />;
+    return <QuizScreen cards={cards} goBack={() => setStartQuiz(false) } />;
   }
 
   return (
@@ -73,16 +73,46 @@ export default function HomeScreen() {
   );
 }
 
-// On screen, picks a random flashcard and show question. Let the user click to show answer. Gives user ability to view next card
-function QuizScreen({ cards }: {cards: Card[] }) {
+// On screen, picks a random flashcard and show question. Let the user click to show answer. Gives user ability to view next card, and the next card will flip
+function QuizScreen({ cards, goBack }: {cards: Card[], goBack: () => void }) {
   const [currentIndex, setCurrentIndex] = useState(Math.floor(Math.random() * cards.length));
-  const [showAnswer, setShowAnswer] = useState(false);
+  const [flipAnimation] = useState(new Animated.Value(0));
+  const [flipped, setFlipped] = useState(false);
+
+  const frontCard = flipAnimation.interpolate({
+    inputRange: [0, 180],
+    outputRange: ["0deg", "180deg"],
+  });
+
+  const backCard = flipAnimation.interpolate({
+    inputRange: [0, 180],
+    outputRange: ["180deg", "360deg"],
+  });
 
   const nextCard = () => {
-    setShowAnswer(false);
+    setFlipped(false);
+    flipAnimation.setValue(0);
     const next = Math.floor(Math.random() * cards.length);
     setCurrentIndex(next);
   };
+
+  const flipCard = () => {
+    if (flipped) {
+      Animated.timing(flipAnimation, {
+        toValue: 0,
+        duration: 500,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      }).start(() => setFlipped(false));
+    } else {
+      Animated.timing(flipAnimation, {
+        toValue: 180,
+        duration: 500,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      }).start(() => setFlipped(true));
+    }
+  }
 
   const card = cards[currentIndex];
 
@@ -90,12 +120,40 @@ function QuizScreen({ cards }: {cards: Card[] }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Flashcard</Text>
-      <TouchableOpacity onPress={() => setShowAnswer(!showAnswer)}>
-        <Text style={styles.flashcard}>
-          {showAnswer ? card.answer : card.question}
-        </Text>
+      <TouchableOpacity onPress={flipCard}>
+        <View>
+          <Animated.View
+            style={[
+              styles.flashcard,
+              {
+                transform: [{ rotateY: frontCard }],
+                backfaceVisibility: "hidden",
+                position: "absolute",
+              },
+            ]}
+          >
+            <Text style={styles.cardText}>{card.question}</Text>
+          </Animated.View>
+
+          <Animated.View
+            style={[
+              styles.flashcard,
+              {
+                transform: [{ rotateY: backCard }],
+                backfaceVisibility: "hidden",
+              },
+            ]}
+          >
+            <Text style={styles.cardText}>{card.answer}</Text>
+          </Animated.View>
+        </View>                   
       </TouchableOpacity>
-      <Button title="Next Question" onPress={nextCard} />
+      <View style={{marginTop: 40}}>
+       <Button title="Next Question" onPress={nextCard} />
+      </View>
+      <View style={{ marginTop: 40 }}>
+        <Button title="Back to Main" onPress={goBack} color="#888" />
+      </View>
     </View>
   );
 }
@@ -125,12 +183,25 @@ const styles = StyleSheet.create({
     marginVertical: 4,
   },
   flashcard: {
-    fontSize: 28,
-    textAlign: 'center',
-    padding: 30,
+    width: 350,
+    height: 200,
+    backgroundColor: "#f9f9f9",
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 10,
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    backfaceVisibility: "hidden",
+  },
+  cardContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 200,
     marginVertical: 20,
+  },
+  cardText: {
+    fontSize: 30,
+    textAlign: "center",
   },
 });
