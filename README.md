@@ -4,7 +4,7 @@ I am creating a flashcard Mobile App that allows users to create and study custo
 
 {Provide a link to your YouTube demonstration. It should be a 4-5 minute demo of the app running and a walkthrough of the code.}
 
-[Software Demo Video](http://youtube.link.goes.here)
+[Flashcard Mobile App Demo Video](https://youtu.be/C7aym1m-_Og)
 
 # Development Environment
 
@@ -12,6 +12,7 @@ To create this mobile app, I used:
 React Native
 TypeScript
 Expo
+Homebrew
 Visual Studio Code
 
 To test the app during creation, I used:

@@ -25,7 +25,9 @@ export default function HomeScreen() {
     }
   };
 
-  //When user selects start quiz; can only be clicked if there's at least one question and answer set
+  /* For when user selects to start quiz:
+  - Can only be clicked if there's at least one question and answer set
+  */
   const whenQuizStart = () => {
     if (cards.length > 0) {
       setStartQuiz(true);
@@ -36,6 +38,7 @@ export default function HomeScreen() {
     return <QuizScreen cards={cards} goBack={() => setStartQuiz(false) } />;
   }
 
+// Area where user will input their questions and answers  
   return (
     <FlatList
       data={cards}
@@ -44,7 +47,7 @@ export default function HomeScreen() {
         <>
           <Stack.Screen options={{ title: 'Flashcards'}} />
           <Text style={styles.title}>Are You Ready?</Text>
-        
+
           <TextInput
             style={styles.input}
             placeholder="Enter Your Question"
@@ -73,7 +76,11 @@ export default function HomeScreen() {
   );
 }
 
-// On screen, picks a random flashcard and show question. Let the user click to show answer. Gives user ability to view next card, and the next card will flip
+/* On screen, picks a random flashcard and show question. 
+- Allows the user click to show answer 
+- Gives user ability to view next question card 
+- Animation to "flip" card to view answer
+*/
 function QuizScreen({ cards, goBack }: {cards: Card[], goBack: () => void }) {
   const [currentIndex, setCurrentIndex] = useState(Math.floor(Math.random() * cards.length));
   const [flipAnimation] = useState(new Animated.Value(0));
@@ -158,6 +165,7 @@ function QuizScreen({ cards, goBack }: {cards: Card[], goBack: () => void }) {
   );
 }
 
+// Styles act as css for mobile app
 const styles = StyleSheet.create({
   container: {
     padding: 20,
